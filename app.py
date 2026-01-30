@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("📥 Product Opportunity Intake Window")
+st.title("📥 Product Opportunity ")
 
 # ---------------------------------------------------------
 # 1. SESSION STATE INITIALIZATION
@@ -93,8 +93,8 @@ if st.session_state.selected_id is None:
                 "Source": "R&D",
                 "Target Setting": "",
                 "Geography": "",
-                "Urgency": "Low",
-                "Priority": "P3",
+                "Urgency": "",
+                "Priority": "",
                 "Submission Date": datetime.today().strftime("%Y-%m-%d"),
                 "Status": "Draft",
                 "Submitted by": "",
@@ -157,7 +157,41 @@ else:
         index=target_index
     )
 
+
     df.at[idx, "Geography"] = st.text_input("Geography *", df.at[idx, "Geography"])
+
+    # Add Urgency dropdown after Geography
+    urgency_options = [
+        "Tender deadline", "Competitive gap", "Regulatory or guideline change",
+        "Strategic priority", "No urgency"
+    ]
+    current_urgency = df.at[idx, "Urgency"] if df.at[idx, "Urgency"] in urgency_options else "No urgency"
+    df.at[idx, "Urgency"] = st.selectbox(
+        "Urgency *",
+        urgency_options,
+        index=urgency_options.index(current_urgency)
+    )
+
+
+    # Add Target Setting dropdown after Urgency
+    target_setting_options = [
+        "Central Lab", "Near-POC", "Decentralized", "Hospital/Screening Program", "Public Health Program"
+    ]
+    current_target_setting = df.at[idx, "Target Setting"] if df.at[idx, "Target Setting"] in target_setting_options else target_setting_options[0]
+    df.at[idx, "Target Setting"] = st.selectbox(
+        "Target Setting *",
+        target_setting_options,
+        index=target_setting_options.index(current_target_setting)
+    )
+
+    # Add Priority dropdown after Target Setting
+    priority_options = ["High", "Medium", "Low"]
+    current_priority = df.at[idx, "Priority"] if df.at[idx, "Priority"] in priority_options else "Medium"
+    df.at[idx, "Priority"] = st.selectbox(
+        "Priority *",
+        priority_options,
+        index=priority_options.index(current_priority)
+    )
 
     st.markdown("### Submission Details")
 
